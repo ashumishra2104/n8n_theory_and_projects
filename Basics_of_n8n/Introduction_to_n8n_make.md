@@ -56,7 +56,7 @@
 
 ### The Challenge: Maintaining Your Calorie Count
 
-Video of the solution: <https://www.linkedin.com/posts/ashumish_%F0%9D%97%9C-%F0%9D%97%9D%F0%9D%98%82%F0%9D%98%80%F0%9D%98%81-%F0%9D%97%95%F0%9D%98%82%F0%9D%97%B6%F0%9D%97%B9%F0%9D%98%81-%F0%9D%97%AE%F0%9D%97%BB-%F0%9D%97%94%F0%9D%97%9C-%F0%9D%97%A1%F0%9D%98%82%F0%9D%98%81%F0%9D%97%BF%F0%9D%97%B6%F0%9D%98%81%F0%9D%97%B6%F0%9D%97%BC%F0%9D%97%BB%F0%9D%97%B6%F0%9D%98%80%F0%9D%98%81-activity-7363781851187998720-2keU?utm_source=share&utm_medium=member_desktop&rcm=ACoAABHCSikB0YzChF0qz1x6mFTkfZKOtGMNYsI>
+[Video of the solution](https://www.linkedin.com/posts/ashumish_%F0%9D%97%9C-%F0%9D%97%9D%F0%9D%98%82%F0%9D%98%80%F0%9D%98%81-%F0%9D%97%95%F0%9D%98%82%F0%9D%97%B6%F0%9D%97%B9%F0%9D%98%81-%F0%9D%97%AE%F0%9D%97%BB-%F0%9D%97%94%F0%9D%97%9C-%F0%9D%97%A1%F0%9D%98%82%F0%9D%98%81%F0%9D%97%BF%F0%9D%97%B6%F0%9D%98%81%F0%9D%97%B6%F0%9D%97%BC%F0%9D%97%BB%F0%9D%97%B6%F0%9D%98%80%F0%9D%98%81-activity-7363781851187998720-2keU?utm_source=share&utm_medium=member_desktop&rcm=ACoAABHCSikB0YzChF0qz1x6mFTkfZKOtGMNYsI)
 
 **What It Takes:**
 
@@ -351,10 +351,6 @@ How do we automate lead tracking and follow-up verification?
 
 ## 🔗 Resources and References
 
-### Google Sheets Template
-
-[Lead Tracking Spreadsheet](https://docs.google.com/spreadsheets/d/1gTi255bB13HLLH75c5iAHU0oTjs8Pbe69xUUgQf6SAc/edit?gid=0#gid=0)
-
 ### Make.com Academy
 
 [Make Academy Enrollments](https://academy.make.com/enrollments)
@@ -583,7 +579,6 @@ Visual automation with n8n opens up a world of possibilities for:
 - **Documentation:** <https://docs.n8n.io/>
 - **Community:** <https://community.n8n.io/>
 - **My LinkedIn:** <https://www.linkedin.com/in/ashumish/>
-- **Lead Tracking Sheet:** [Google Sheets Link](https://docs.google.com/spreadsheets/d/1gTi255bB13HLLH75c5iAHU0oTjs8Pbe69xUUgQf6SAc/edit?gid=0#gid=0)
 
 ---
 
