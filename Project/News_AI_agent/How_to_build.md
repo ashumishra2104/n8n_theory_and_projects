@@ -1045,6 +1045,8 @@ Congratulations! 🎊 You've successfully built your own AI News Agent!
 
 - **First time:** 45- 60 minutes
 
+**Excel Sheet wih step by step** : <https://docs.google.com/spreadsheets/d/1sZwBr8SK0mKStCQ63dulH2tB8awFY1xLHc12FYYCWCg/edit?gid=0#gid=0>
+
 ---
 
 **📌 Bookmark this guide for future reference!**
