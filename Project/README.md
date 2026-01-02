@@ -10,5 +10,11 @@ An intelligent agent that fetches the latest AI news, summarizes it, and can ema
 
 - **Features**: Chat interface, RSS Feed parsing, News API integration, Contextual memory.
 
+### 2. [Personal AI Life Manager](./Mail_Task_Calendar_Telegram_agent/how_to_build.md)
+
+A voice-enabled AI assistant that manages your digital life (Email, Calendar, Tasks) via Telegram.
+
+- **Features**: Voice commands (Whisper), Email management, Calendar scheduling, Task tracking, Telegram interface.
+
 ---
 *More projects coming soon!*
