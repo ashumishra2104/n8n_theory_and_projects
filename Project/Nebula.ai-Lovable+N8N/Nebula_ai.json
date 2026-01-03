@@ -1,0 +1,327 @@
+{
+  "name": "Nebula_ai",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "392d9bb9-64ce-42eb-8fe0-22ba0e674ef5",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        592
+      ],
+      "id": "fcbfaa47-7baa-4913-966a-c55c79973996",
+      "name": "Webhook",
+      "webhookId": "392d9bb9-64ce-42eb-8fe0-22ba0e674ef5"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        512
+      ],
+      "id": "11a43619-64a9-4b44-b779-3dbdb3b15a63",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        512,
+        400
+      ],
+      "id": "4fe3a29e-4e72-4416-bc15-7ad3de8c34ce",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Email : {{ $json.body.email }}\nQuery : {{ $json.body.query }}",
+        "options": {
+          "systemMessage": "=You are a customer support agent for Nebula AI, an enterprise-grade large language model purpose-built for manufacturing environments and robotics operations. Nebula AI specializes in understanding industrial processes, equipment specifications, and automation workflows to deliver precise, actionable insights.\n\nCONTEXT:\nYou will receive support queries from users via a web form. Each query will include:\n- User's email address\n- Their support query/message\n\nYOUR TASK:\nGenerate an immediate, single-sentence response that will be sent back to the webhook to display on the website interface.\n\nRESPONSE REQUIREMENTS:\n1. Keep it to ONE concise sentence (maximum 25 words)\n2. Acknowledge receipt of their query\n3. Inform them that a detailed response will be sent via email\n4. Encourage them to check out the latest press release while waiting\n5. Maintain a professional yet friendly tone\n6. Use clear, simple language\n\nRESPONSE FORMAT:\nYour response should follow this structure:\n\"Thank you for contacting Nebula AI! Your query has been received and our team will respond via email shortly. Meanwhile, check out our latest press release for updates on manufacturing AI innovations.\"\n\nTONE GUIDELINES:\n- Professional and reassuring\n- Efficient and clear\n- Slightly futuristic (matching the tech brand)\n- Avoid jargon\n- No exclamation marks overuse (max 1-2)\n\nEXAMPLES:\n\nInput: User asks about integration issues\nOutput: \"Your integration query has been received! Our support team will email you a detailed solution shortly—meanwhile, explore our latest manufacturing automation press release.\"\n\nInput: User asks about pricing\nOutput: \"Thank you for your interest in Nebula AI! Your pricing inquiry has been logged and our team will respond via email within the hour. Check out our latest press release while you wait.\"\n\nInput: User reports a bug\nOutput: \"Your bug report has been received and forwarded to our technical team. You'll receive an email update soon—in the meantime, see what's new in our latest press release!\"\n\nIMPORTANT CONSTRAINTS:\n- DO NOT attempt to answer the technical query in this immediate response\n- DO NOT make specific promises about"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        288
+      ],
+      "id": "4be871c2-9210-438d-98e5-e2db09534565",
+      "name": "Quick response agent"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        736,
+        400
+      ],
+      "id": "c1c045d2-9176-422d-b080-97dfa319da4e",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.query }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a technical support specialist for Nebula AI, an enterprise-grade LLM for manufacturing and robotics. You will receive support queries and must provide detailed, accurate responses by fetching information from our knowledge base documentation.\n\nWORKFLOW:\n1. Receive user query and email address\n2. Use Google Docs tool to fetch relevant information from our knowledge base\n3. Analyze and condense the information\n4. Generate a professional email response\n\nINPUT DATA:\n- User Email: {{email}}\n- User Query: {{query}}\n\nYOUR TASK:\nGenerate a complete, professional email response that addresses the user's query using information from the Google Docs knowledge base.The tool is attached and called as Nebula FAQ.Please use this tool for all the information, using it is must before answering \n\nGOOGLE DOCS TOOL USAGE:\n- Access the Nebula AI knowledge base document (ID: YOUR_DOC_ID)\n- Search for sections relevant to the user's query\n- Extract key information, technical details, and solutions\n- Synthesize information from multiple sections if needed\n\nEMAIL RESPONSE REQUIREMENTS:\n1. Subject Line: Create an appropriate subject (format: \"Re: [Brief topic from query]\")\n2. Greeting: Professional greeting using their email\n3. Query Acknowledgment: Brief recap of their question\n4. Solution/Answer: Detailed response based on Google Docs content\n   - Use information from the knowledge base\n   - Be specific and actionable\n   - Include step-by-step instructions if applicable\n   - Cite relevant sections or features\n5. Additional Resources: Suggest related documentation or features if relevant\n6. Closing: Professional sign-off with support contact info\n\nTONE & STYLE:\n- Professional yet approachable\n- Technical but clear (avoid excessive jargon)\n- Confident and helpful\n- Enterprise-appropriate\n\nOUTPUT FORMAT:\nReturn a JSON object with this structure:\n{\n  \"subject\": \"Email subject line\",\n  \"body\": \"Full email body content\",\n  \"relevant_docs\": \"Brief note of which sections were used (for internal logging)\"\n}\n\nCONSTRAINTS:\n- Keep email body between 200-400 words\n- If information is not found in Google Docs, politely inform the user and offer to escalate\n- Always maintain professional tone\n- Include specific details from knowledge base (not generic responses)\n- If query is outside Nebula AI scope, politely redirect\n\nEXAMPLE OUTPUT STRUCTURE:\n{\n  \"subject\": \"Re: Integration Setup for Manufacturing Systems\",\n  \"body\": \"Dear Customer,\\n\\nThank you for contacting Nebula AI support regarding integration setup...\\n\\n[Detailed response based on docs]\\n\\nBest regards,\\nNebula AI Support Team\",\n  \"relevant_docs\": \"Integration Guide - Section 3.2\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        800
+      ],
+      "id": "2909ef15-a9e5-459d-9196-8beed66a3c95",
+      "name": "Email agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        1024
+      ],
+      "id": "403a8999-9b2b-453e-8c92-28f0f4201b61",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"subject\": \"Re: Integration Setup for Manufacturing Systems\",\n  \"body\": \"Dear Customer,\\n\\nThank you for contacting Nebula AI support regarding integration setup...\\n\\n[Detailed response based on docs]\\n\\nBest regards,\\nNebula AI Support Team\",\n  \"relevant_docs\": \"Integration Guide - Section 3.2\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        1024
+      ],
+      "id": "78c720ee-656c-42b3-852e-d53312eab8e3",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "https://docs.google.com/document/d/1-3KdHUUDvIq5gmIa86J2RjtiRUKdHR_PS6Yc9dUfU_Q/edit?tab=t.0"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        176,
+        1024
+      ],
+      "id": "a1aa8e3d-d5a1-4ab8-834b-794fda9b83b7",
+      "name": "Nebula FAQ",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "6avFjpay8Cv4SN2K",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.output.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        800
+      ],
+      "id": "1eb00fe5-27c5-4fd5-ae29-6452bcdbd9cb",
+      "name": "Send a message",
+      "webhookId": "bb36ca11-d644-44a0-917d-1878544acc8f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MTb9GwPEqXfxeehC",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Immediate response to UI\n",
+        "height": 496,
+        "width": 896
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "f3e6d361-198f-49d8-866e-e5bfd60065f6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Send mail to your lead\n",
+        "height": 496,
+        "width": 896,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        704
+      ],
+      "typeVersion": 1,
+      "id": "373fa76b-2c41-462c-bb3e-252365ebe0c5",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Quick response agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Quick response agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quick response agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Email agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebula FAQ": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0eae494f-db2f-4cdc-9a93-f1d091a00daa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6538115531bc3b9c8c4a94ce4d959e741cd9be003bdce9bf4bed3572651a7cdd"
+  },
+  "id": "HrWRfdZ9PEmqgNLo",
+  "tags": []
+}
