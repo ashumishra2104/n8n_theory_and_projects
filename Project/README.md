@@ -16,5 +16,11 @@ A voice-enabled AI assistant that manages your digital life (Email, Calendar, Ta
 
 - **Features**: Voice commands (Whisper), Email management, Calendar scheduling, Task tracking, Telegram interface.
 
+### 3. [Full Stack AI Agent (Nebula AI)](./Nebula.ai-Lovable+N8N/how_to_build.md)
+
+A complete customer support system combining a futuristic UI (Lovable.dev) with intelligent backend automation.
+
+- **Features**: Real-time Webhook integration, RAG with Google Docs, Two-tier response system (Instant UI update + Detailed Email), Professional AI-generated code.
+
 ---
 *More projects coming soon!*
