@@ -583,3 +583,28 @@ Visual automation with n8n opens up a world of possibilities for:
 ---
 
 **Happy Automating! 🚀**
+
+
+
+Resources for n8n - > updated on 29th Jan'26 :
+
+https://www.youtube.com/watch?v=ZP4fjVWKt2w&list=PLvQWpZ46MVvi7vznsClrYd7NA2Cb7YYMO&index=82
+https://www.youtube.com/watch?v=DkV7ztrhLh8
+https://www.youtube.com/watch?v=ZP4fjVWKt2w
+https://www.youtube.com/watch?v=6DLZK7XDOGo
+https://youtu.be/wEXrbtqNIqI?si=OSrgPK0atnLOMpZr
+https://youtu.be/tf1mnCVWJkQ?si=gIr9b18lU-AHkOhG
+
+
+
+Market places : 
+https://n8nbazar.ai/
+https://github.com/enescingoz/awesome-n8n-templates
+https://n8n.io/workflows/
+https://github.com/wassupjay/n8n-free-templates
+
+
+Udemy courses : 
+https://www.udemy.com/course/n8n-course/
+
+
