@@ -32,8 +32,8 @@ Before starting, make sure you have:
 
 ## 🏗️ Architecture Overview
 
-![Workflow Architecture](./images/workflow-architecture.png)
-*[DROP IMAGE: Screenshot of the complete n8n workflow]*
+<img width="1957" height="1033" alt="image" src="https://github.com/user-attachments/assets/d05ace0a-ce98-4765-ae23-2e2968dedfb2" />
+
 
 The workflow follows this flow:
 
@@ -63,8 +63,8 @@ Telegram Message → Check Message Type → Voice or Text
    - Choose a username (must end in 'bot', e.g., "my_audio_news_bot")
 4. Save the **API Token** you receive
 
-![BotFather Setup](./images/botfather-setup.png)
-*[DROP IMAGE: Screenshot of BotFather conversation]*
+<img width="2144" height="908" alt="image" src="https://github.com/user-attachments/assets/b3aa9d07-a5e4-48d8-89e6-b564161ff45c" />
+
 
 #### 1.2 Configure Bot Settings (Optional)
 
@@ -82,8 +82,6 @@ Telegram Message → Check Message Type → Voice or Text
 2. Click **"+ New workflow"**
 3. Name it **"Audio Agent"**
 
-![New Workflow](./images/new-workflow.png)
-*[DROP IMAGE: Screenshot of creating new workflow in n8n]*
 
 ---
 
@@ -95,8 +93,7 @@ Telegram Message → Check Message Type → Voice or Text
 2. Search for **"Telegram Trigger"**
 3. Select it from the results
 
-![Add Telegram Trigger](./images/telegram-trigger-add.png)
-*[DROP IMAGE: Screenshot of adding Telegram Trigger node]*
+
 
 #### 3.2 Configure Telegram Credentials
 
@@ -105,8 +102,7 @@ Telegram Message → Check Message Type → Voice or Text
 3. Paste your **Bot Token** from BotFather
 4. Click **"Save"**
 
-![Telegram Credentials](./images/telegram-credentials.png)
-*[DROP IMAGE: Screenshot of Telegram credentials configuration]*
+
 
 #### 3.3 Configure Trigger Settings
 
@@ -129,8 +125,7 @@ Telegram Message → Check Message Type → Voice or Text
 2. Search for **"If"** node
 3. Add it to the canvas
 
-![Add If Node](./images/if-node-add.png)
-*[DROP IMAGE: Screenshot of If node configuration]*
+
 
 #### 4.2 Configure the Condition
 
@@ -155,8 +150,7 @@ This node checks if the incoming message is a voice message:
    - **Operation**: Get
    - **File ID**: `{{ $json.message.voice.file_id }}`
 
-![Download File Node](./images/download-file.png)
-*[DROP IMAGE: Screenshot of file download configuration]*
+
 
 **What This Does:** Downloads the voice message file from Telegram servers.
 
@@ -167,8 +161,7 @@ This node checks if the incoming message is a voice message:
 1. Add an **OpenAI** node after the download node
 2. Search for **"OpenAI"** and select it
 
-![Add OpenAI Node](./images/openai-transcribe-add.png)
-*[DROP IMAGE: Screenshot of adding OpenAI node]*
+
 
 #### 5.3 Configure OpenAI Credentials
 
@@ -177,8 +170,7 @@ This node checks if the incoming message is a voice message:
 3. Name it: `OpenAI account`
 4. Click **"Save"**
 
-![OpenAI Credentials](./images/openai-credentials.png)
-*[DROP IMAGE: Screenshot of OpenAI credentials setup]*
+
 
 #### 5.4 Configure Transcription Settings
 
@@ -197,8 +189,7 @@ This node checks if the incoming message is a voice message:
 1. Add an **AI Agent** node after the transcription node
 2. Connect it to receive the transcribed text
 
-![Add AI Agent](./images/ai-agent-add.png)
-*[DROP IMAGE: Screenshot of AI Agent node]*
+
 
 #### 6.2 Configure the AI Agent
 
@@ -238,8 +229,7 @@ OUTPUT RULES:
 TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 ```
 
-![AI Agent Configuration](./images/ai-agent-config.png)
-*[DROP IMAGE: Screenshot of AI Agent system message configuration]*
+
 
 **What This Does:** Creates an AI agent that acts as a news anchor, fetching and summarizing news in an engaging way.
 
@@ -251,8 +241,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 2. Look for the **"Chat Model"** connection point
 3. Add an **OpenAI Chat Model** node
 
-![Add Chat Model](./images/chat-model-add.png)
-*[DROP IMAGE: Screenshot showing Chat Model connection]*
+
 
 #### 6.4 Configure Chat Model
 
@@ -260,8 +249,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 - **Model**: Select `gpt-4.1-mini` (or latest available)
 - Connect it to the AI Agent's **"ai_languageModel"** input
 
-![Chat Model Configuration](./images/chat-model-config.png)
-*[DROP IMAGE: Screenshot of Chat Model configuration]*
+
 
 ---
 
@@ -272,8 +260,6 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 1. Add an **HTTP Request Tool** node
 2. Connect it to the AI Agent's **"ai_tool"** input
 
-![Add HTTP Tool](./images/http-tool-add.png)
-*[DROP IMAGE: Screenshot of HTTP Request Tool]*
 
 #### 7.2 Configure News API Request
 
@@ -289,8 +275,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 - Name: `X-Api-Key`
 - Value: `YOUR_NEWS_API_KEY` (replace with your actual key)
 
-![News API Configuration](./images/news-api-config.png)
-*[DROP IMAGE: Screenshot of News API configuration with parameters]*
+
 
 **What This Does:** Provides the AI agent with real-time news data to create summaries from.
 
@@ -303,8 +288,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 1. Connect a new **AI Agent** node to the **False** output of the If node
 2. This handles direct text messages
 
-![Second AI Agent](./images/ai-agent-text.png)
-*[DROP IMAGE: Screenshot of second AI agent for text messages]*
+
 
 #### 8.2 Configure AI Agent1
 
@@ -327,8 +311,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 1. Add an **OpenAI** node that receives output from BOTH AI agents
 2. This is where the TTS magic happens!
 
-![Generate Audio Node](./images/generate-audio-add.png)
-*[DROP IMAGE: Screenshot of Generate Audio node placement]*
+
 
 #### 9.2 Configure TTS Settings
 
@@ -337,8 +320,7 @@ TONE: Excited but professional. Trustworthy. Like your favorite podcast host.
 - **Input Text**: `{{ $json.output }}`
 - **Voice**: `shimmer` (Options: alloy, echo, fable, onyx, nova, shimmer)
 
-![TTS Configuration](./images/tts-config.png)
-*[DROP IMAGE: Screenshot of TTS configuration with voice options]*
+
 
 #### 9.3 Understanding OpenAI TTS Voices
 
@@ -361,8 +343,7 @@ You can explore additional TTS parameters:
 - **Speed**: Control speaking rate (0.25 to 4.0)
 - **Response Format**: mp3, opus, aac, flac
 
-![TTS Advanced](./images/tts-advanced.png)
-*[DROP IMAGE: Screenshot of advanced TTS options]*
+
 
 **What This Does:** Converts the AI-generated news script into natural-sounding human speech using OpenAI's TTS technology.
 
@@ -375,8 +356,7 @@ You can explore additional TTS parameters:
 1. Add a final **Telegram** node after the Generate audio node
 2. This sends the audio back to the user
 
-![Send Audio Node](./images/send-audio-add.png)
-*[DROP IMAGE: Screenshot of Send Audio node]*
+
 
 #### 10.2 Configure Send Audio Settings
 
@@ -386,8 +366,7 @@ You can explore additional TTS parameters:
 - **Chat ID**: `{{ $node["Telegram Trigger"].json.message.chat.id }}`
 - **Binary Data**: Enable this toggle (audio file is in binary format)
 
-![Send Audio Configuration](./images/send-audio-config.png)
-*[DROP IMAGE: Screenshot of Send Audio configuration]*
+
 
 **What This Does:** Sends the generated audio file back to the Telegram user who initiated the conversation.
 
@@ -400,8 +379,7 @@ You can explore additional TTS parameters:
 1. Click the **"Active"** toggle in the top-right corner
 2. The workflow should now be running
 
-![Activate Workflow](./images/activate-workflow.png)
-*[DROP IMAGE: Screenshot of workflow activation toggle]*
+
 
 #### 11.2 Test with Voice Message
 
@@ -409,16 +387,12 @@ You can explore additional TTS parameters:
 2. Send a voice message saying: *"Give me the latest tech news"*
 3. Wait for the bot to process and respond with audio
 
-![Test Voice Message](./images/test-voice.png)
-*[DROP IMAGE: Screenshot of Telegram conversation with voice message]*
 
 #### 11.3 Test with Text Message
 
 1. Send a text message: *"What's happening in Machine Learning today?"*
 2. Receive an audio news summary
 
-![Test Text Message](./images/test-text.png)
-*[DROP IMAGE: Screenshot of Telegram conversation with text message]*
 
 #### 11.4 Review Execution
 
@@ -426,8 +400,6 @@ You can explore additional TTS parameters:
 2. Check the **"Executions"** tab to see the workflow run
 3. Click on any execution to debug or review data flow
 
-![Execution Review](./images/execution-review.png)
-*[DROP IMAGE: Screenshot of n8n executions panel]*
 
 ---
 
@@ -622,10 +594,7 @@ This tutorial is released under the MIT License. Feel free to use, modify, and s
 - Technical Product Manager at Zigram
 - Passionate about making AI accessible through education
 
-Connect with me:
-- GitHub: [Your GitHub Profile]
-- LinkedIn: [Your LinkedIn Profile]
-- Twitter: [Your Twitter Handle]
+
 
 ---
 
