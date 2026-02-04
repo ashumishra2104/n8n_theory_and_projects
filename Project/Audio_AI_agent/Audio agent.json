@@ -1,0 +1,411 @@
+{
+  "name": "Audio agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        160
+      ],
+      "id": "a6b9ef19-ae21-4ad7-80e5-6258f140663f",
+      "name": "Telegram Trigger",
+      "webhookId": "787c5c55-1288-4e7a-b30a-f257cbc77347",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q815bDyevhcHudlo",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "65244c63-d7a0-41a7-be2c-c9cb112a131d",
+              "leftValue": "={{ $json.message.voice.mime_type }}",
+              "rightValue": "audio/ogg",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        160
+      ],
+      "id": "5dc57714-53e0-4eb7-8304-74c178c0d78b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        -48
+      ],
+      "id": "93c02fce-42dc-47dd-bb35-c27aa883f67c",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "209fa5ec-b6b1-407d-abac-26de54994a28",
+      "name": "Downloading the file",
+      "webhookId": "cfa6055e-e3f2-4f6f-8a90-20a258569ab0",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q815bDyevhcHudlo",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "You are an enthusiastic news anchor with the personality of a tech-savvy podcast host. Your name is \"News Flash\" and you deliver news with energy and excitement.\n\nYOUR ROLE:\n- You receive news articles from the News API tool\n- You select the 3-5 most interesting/important news stories\n- You create a compelling 1-minute audio script (approximately 150-180 words)\n\nYOUR PERSONALITY:\n- Energetic, engaging, and conversational\n- Use phrases like \"Here's what's trending!\", \"Breaking:\", \"Don't miss this!\"\n- Add brief, witty commentary about tech and business news\n- Make it feel like a premium podcast, not a robot\n- Use natural pauses and emphasis where appropriate\n\nSCRIPT STRUCTURE:\n1. Opening hook (5 seconds): \"Hey there! It's News Flash with your daily briefing. Here's what's making headlines...\"\n2. Top 3-5 stories (45 seconds): Each story gets 8-15 seconds. Include headline + why it matters\n3. Closing (5 seconds): \"That's your quick news wrap! Stay informed, stay ahead. I'm News Flash, see you next time!\"\n\nOUTPUT RULES:\n- Write in NATURAL SPOKEN ENGLISH (not written English)\n- Include [PAUSE] markers where the speaker should pause naturally\n- Use EMPHASIS for important numbers or names\n- Keep it exactly 1 minute when read aloud\n- Make it conversational - like you're talking to a friend\n- End with a memorable sign-off\n\nTONE: Excited but professional. Trustworthy. Like your favorite podcast host."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        896,
+        -144
+      ],
+      "id": "e60115c5-73ae-43be-9dd0-47dc9dcb336a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        80
+      ],
+      "id": "0c10c6d0-f0c6-4799-96f5-fd5d946fd9b6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $json.output }}",
+        "voice": "shimmer",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        160
+      ],
+      "id": "416b6e65-4085-41d4-ab2a-c3f34eabd612",
+      "name": "Generate audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $node[\"Telegram Trigger\"].json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        160
+      ],
+      "id": "a7ad3d74-2392-4ad0-bc88-a4d2d3677eb1",
+      "name": "Send an audio file",
+      "webhookId": "a1085ba8-2066-43ff-94ff-59980d2d2c46",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q815bDyevhcHudlo",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        896,
+        368
+      ],
+      "id": "23629aaa-75d6-45b1-9355-8005aba20ad4",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        976,
+        592
+      ],
+      "id": "3bfa69d0-c039-435b-b14b-c7f8e9268795",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "Machine Learning "
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "pageSize",
+              "value": "20"
+            },
+            {
+              "name": "sortBy",
+              "value": "relevancy"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "32140efa666042f9a3ad56659d0955cd"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        176
+      ],
+      "id": "b086e713-0620-41bb-b7ce-f07bc699a5fd",
+      "name": "News API tool"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Downloading the file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Downloading the file": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Generate audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate audio": {
+      "main": [
+        [
+          {
+            "node": "Send an audio file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Generate audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News API tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b662816d-e651-47ac-ac21-9aa35e23a0c5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6538115531bc3b9c8c4a94ce4d959e741cd9be003bdce9bf4bed3572651a7cdd"
+  },
+  "id": "Egt3fQ9Ot41guBE9",
+  "tags": []
+}
