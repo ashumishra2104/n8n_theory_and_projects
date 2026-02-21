@@ -5,6 +5,11 @@
 > **📊 Type of Text Splitters:** [Click here to access](https://claude.ai/public/artifacts/d61da7fe-3609-4568-a1e9-308f143c3f4d)
 
 > **📊 Video Tutorial:** [Click here to watch](https://youtu.be/u9m_uuLKYuA)
+
+> **📊 What is Dimension in Vectors:** [Click here to access ](https://claude.ai/public/artifacts/bb9b9a1d-71f9-4c50-b32c-966916b430a5)
+
+> **📊 How do vectors do matching** [Click here to access ](https://claude.ai/public/artifacts/04530b17-6947-4da2-8fca-c5c2516edf41)
+
 ---
 
 ## 📚 Overview
