@@ -29,71 +29,70 @@ Before starting, ensure you have the following accounts and credentials ready:
 
 ---
 
-## 🏗️ Architecture Overview
+## 🔀 Flow Diagrams
 
-The system is split into two workflows. Here's a high-level view of both:
-
-```
-Part 1 — Data Ingestion
-────────────────────────────────────────────────────────
-Google Drive (New File Trigger)
-  → Download File
-  → Default Data Loader (Binary)
-  → Embeddings OpenAI (text-embedding-3-small, dim: 512)
-  → Pinecone Vector Store (Insert Mode)
-
-Part 2 — Chat Retrieval
-────────────────────────────────────────────────────────
-Chat Trigger (Public)
-  → AI Agent (GPT-4o)
-      ├── OpenAI Chat Model
-      ├── Simple Memory (10 messages)
-      └── Pinecone Vector Store (Retrieve as Tool)
-              └── Embeddings OpenAI (text-embedding-3-small, dim: 512)
-```
+> **How to read these diagrams:**
+> - **Solid arrows** `-->` = main data flow (left to right / top to bottom)
+> - **Dotted arrows** `-.->` = sub-node connection (a helper plugged into a main node, not a step in the chain)
 
 ---
-
-## 🔀 Flow Diagrams
 
 ### Part 1 — Loading Data into Pinecone
 
 ```mermaid
-flowchart TD
-    A([Google Drive Trigger\nEvent: File Created\nPolls every minute]) --> B
-    B([Download File\nResource: File\nOperation: Download\nFile ID from trigger]) --> C
-    C([Pinecone Vector Store\nMode: Insert Documents\nIndex: your-index-name\nBatch Size: 200])
-    D([Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| C
-    E([Default Data Loader\nData Type: Binary\nMode: Load All Input Data\nFormat: Auto Detect by MIME\nText Splitting: Simple]) -->|ai_document| C
-    B --> C
+flowchart LR
+    A[Google Drive Trigger] --> B[Download File]
+    B --> C[Pinecone Vector Store]
+    D[Default Data Loader] -.->|feeds document| C
+    E[Embeddings OpenAI] -.->|converts text to vectors| C
 
-    style A fill:#c8f7c5,stroke:#27ae60
-    style B fill:#c8f7c5,stroke:#27ae60
-    style C fill:#aed6f1,stroke:#2980b9
-    style D fill:#f9e79f,stroke:#f39c12
-    style E fill:#f9e79f,stroke:#f39c12
+    style A fill:#c8f7c5,stroke:#27ae60,color:#000
+    style B fill:#c8f7c5,stroke:#27ae60,color:#000
+    style C fill:#aed6f1,stroke:#2980b9,color:#000
+    style D fill:#f9e79f,stroke:#f39c12,color:#000
+    style E fill:#f9e79f,stroke:#f39c12,color:#000
 ```
+
+**What each node does:**
+
+| Node | Type | Role |
+|---|---|---|
+| Google Drive Trigger | Main flow | Watches your folder — fires when a new file is uploaded |
+| Download File | Main flow | Downloads the file content from Drive into n8n |
+| Pinecone Vector Store | Main flow | Stores the processed document as vectors in Pinecone |
+| Default Data Loader | Sub-node | Reads the raw file and prepares it for processing |
+| Embeddings OpenAI | Sub-node | Converts text chunks into numbers (vectors) so Pinecone can store and search them |
 
 ---
 
 ### Part 2 — Retrieving Data via Chatbot
 
 ```mermaid
-flowchart TD
-    A([Chat Trigger\nPublic: true\nWaits for user message]) --> B
-    B([AI Agent\nModel: GPT-4o\nStrict: Use only vector store data])
-    C([OpenAI Chat Model\nModel: gpt-4o]) -->|ai_languageModel| B
-    D([Simple Memory\nContext Window: 10 messages]) -->|ai_memory| B
-    E([Pinecone Vector Store\nMode: Retrieve as Tool\nLimit: 4\nInclude Metadata: On]) -->|ai_tool| B
-    F([Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| E
+flowchart LR
+    A[Chat Trigger] --> B[AI Agent]
+    B -->|calls when needed| C[Pinecone Vector Store]
+    C -.->|needs to search| D[Embeddings OpenAI]
+    E[OpenAI Chat Model] -.->|powers the agent| B
+    F[Simple Memory] -.->|remembers conversation| B
 
-    style A fill:#c8f7c5,stroke:#27ae60
-    style B fill:#d2b4de,stroke:#8e44ad
-    style C fill:#f9e79f,stroke:#f39c12
-    style D fill:#aed6f1,stroke:#2980b9
-    style E fill:#aed6f1,stroke:#2980b9
-    style F fill:#f9e79f,stroke:#f39c12
+    style A fill:#c8f7c5,stroke:#27ae60,color:#000
+    style B fill:#d2b4de,stroke:#8e44ad,color:#000
+    style C fill:#aed6f1,stroke:#2980b9,color:#000
+    style D fill:#f9e79f,stroke:#f39c12,color:#000
+    style E fill:#f9e79f,stroke:#f39c12,color:#000
+    style F fill:#aed6f1,stroke:#2980b9,color:#000
 ```
+
+**What each node does:**
+
+| Node | Type | Role |
+|---|---|---|
+| Chat Trigger | Main flow | Receives the user's message and starts the workflow |
+| AI Agent | Main flow | The brain — decides what to do, calls Pinecone when it needs information |
+| Pinecone Vector Store | Tool (called by Agent) | Searches the vector database and returns relevant document chunks |
+| Embeddings OpenAI | Sub-node of Pinecone | Converts the user's question into a vector so Pinecone can find similar content |
+| OpenAI Chat Model | Sub-node of Agent | The GPT-4o model that actually generates the response |
+| Simple Memory | Sub-node of Agent | Keeps track of the last 10 messages so the bot remembers context |
 
 ---
 
@@ -351,6 +350,6 @@ The agent receives the user's question, uses Pinecone as a tool to retrieve cont
 
 ---
 
-*Last Updated: February 2026*  
-*Created by: Ashu Mishra*  
+*Last Updated: February 2026*
+*Created by: Ashu Mishra*
 *GitHub: [@ashumishra2104](https://github.com/ashumishra2104)*
