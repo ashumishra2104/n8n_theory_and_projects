@@ -2,7 +2,7 @@
 
 > **📊 Step-by-step Reference Sheet (Google Sheets):** [Click here to access the detailed step-by-step guide](https://docs.google.com/spreadsheets/d/19wGfOP38LQfUwmXNwd13IxKzgBhPcPsB81pTLgQjsYM/edit?usp=sharing)
 
-> **📊 Type of Text Splitters:** [Click here to access the detailed step-by-step guide](https://claude.ai/public/artifacts/d61da7fe-3609-4568-a1e9-308f143c3f4d)
+> **📊 Type of Text Splitters:** [Click here to access](https://claude.ai/public/artifacts/d61da7fe-3609-4568-a1e9-308f143c3f4d)
 ---
 
 ## 📚 Overview
