@@ -60,16 +60,11 @@ Chat Trigger (Public)
 
 ```mermaid
 flowchart TD
-    A([🟢 Google Drive Trigger\nWatches folder every minute\nEvent: File Created]) --> B
-
-    B([📥 Download File\nResource: File\nOperation: Download\nFile ID: {{ $json.id }}]) --> C
-
-    C([🗄️ Pinecone Vector Store\nMode: Insert Documents\nIndex: your-index-name\nEmbedding Batch Size: 200]) 
-
-    D([🧠 Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| C
-
-    E([📄 Default Data Loader\nData Type: Binary\nMode: Load All Input Data\nFormat: Auto Detect by MIME\nText Splitting: Simple]) -->|ai_document| C
-
+    A([Google Drive Trigger\nEvent: File Created\nPolls every minute]) --> B
+    B([Download File\nResource: File\nOperation: Download\nFile ID from trigger]) --> C
+    C([Pinecone Vector Store\nMode: Insert Documents\nIndex: your-index-name\nBatch Size: 200])
+    D([Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| C
+    E([Default Data Loader\nData Type: Binary\nMode: Load All Input Data\nFormat: Auto Detect by MIME\nText Splitting: Simple]) -->|ai_document| C
     B --> C
 
     style A fill:#c8f7c5,stroke:#27ae60
@@ -85,15 +80,12 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([💬 Chat Trigger\nPublic: true\nWaits for user message]) --> B
-
-    B([🤖 AI Agent\nModel: GPT-4o\nSystem: iOS 18 assistant\nStick strictly to vector store data]) 
-
-    C([🧠 OpenAI Chat Model\nModel: gpt-4o]) -->|ai_languageModel| B
-    D([💾 Simple Memory\nContext Window: 10 messages]) -->|ai_memory| B
-    E([🔍 Pinecone Vector Store\nMode: Retrieve as Tool\nDescription: Retrieve data from vector store\nLimit: 4\nInclude Metadata: On]) -->|ai_tool| B
-
-    F([🧠 Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| E
+    A([Chat Trigger\nPublic: true\nWaits for user message]) --> B
+    B([AI Agent\nModel: GPT-4o\nStrict: Use only vector store data])
+    C([OpenAI Chat Model\nModel: gpt-4o]) -->|ai_languageModel| B
+    D([Simple Memory\nContext Window: 10 messages]) -->|ai_memory| B
+    E([Pinecone Vector Store\nMode: Retrieve as Tool\nLimit: 4\nInclude Metadata: On]) -->|ai_tool| B
+    F([Embeddings OpenAI\nModel: text-embedding-3-small\nDimensions: 512]) -->|ai_embedding| E
 
     style A fill:#c8f7c5,stroke:#27ae60
     style B fill:#d2b4de,stroke:#8e44ad
