@@ -1,0 +1,204 @@
+{
+  "name": "RAG_loading_data_on Pinecone_part_1",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1QTSiH0gQEcd3_Lvd7R4WD3wUAIXQlcPO",
+          "mode": "list",
+          "cachedResultName": "First RAG agent",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1QTSiH0gQEcd3_Lvd7R4WD3wUAIXQlcPO"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        160
+      ],
+      "id": "3dfc06fc-6059-43b1-8637-61cf9e4d2571",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "dhQTLpAgOjMIFXZs",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        208,
+        160
+      ],
+      "id": "59cb575f-9843-4e27-af3d-404a5ce63c1f",
+      "name": "Download File",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "s3O8DazzzHQ6m9KE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "dummyaccex",
+          "mode": "list",
+          "cachedResultName": "dummyaccex"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        160
+      ],
+      "id": "af98f82c-43f1-4d50-a9ea-1b966c82f263",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "q0bW3OdmrMc4oLwP",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 512
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        384
+      ],
+      "id": "552e38b0-d299-4375-bdb1-fc54d85d10c1",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "5nUtwZg9Clpygj66",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Loading of data in pinecone vector store",
+        "height": 464,
+        "width": 992
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        64
+      ],
+      "id": "79a9ecfc-9944-431e-a522-07ca12fd587e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        568,
+        384
+      ],
+      "id": "57354552-fb53-4806-bfe3-a873736fefe1",
+      "name": "Default Data Loader"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "839a8564-0b74-4d2c-8544-6eff2f00d0c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6538115531bc3b9c8c4a94ce4d959e741cd9be003bdce9bf4bed3572651a7cdd"
+  },
+  "id": "gtPQOTZmMwMlFo7V",
+  "tags": []
+}
