@@ -203,5 +203,3 @@ For each project, students should submit:
 4. **1-paragraph writeup**: What does your bot do? Who is it for?
 
 ---
-
-*Built as part of the AI Product Management curriculum — IITP / MASAI cohort*
